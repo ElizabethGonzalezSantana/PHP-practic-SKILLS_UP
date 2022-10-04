@@ -77,22 +77,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $phone = limpiar_dato($_POST["phone"]);
         echo "$phone<br>";
 
-        if (validar_name($name)) {
-        } else {
-            $name_err = true;
-        }
+            if (validar_name($name)) {
+                } else {
+                    $name_err = true;
+                }
 
-        if (validar_email($email)) {
-        } else {
-            $email_err = true;
-        }
+            if (validar_email($email)) {
+                } else {
+                    $email_err = true;
+                }
 
-        if (validar_phone($phone)) {
-        } else {
-            $phone_err = true;
-        }
+            if (validar_phone($phone)) {
+                } else {
+                    $phone_err = true;
+                }
 
-        if (validar_name($name) || validar_email($email) || validar_phone($phone)) {
+        if (validar_name($name) && validar_email($email) && validar_phone($phone)) {
         } else {
             if ($name_err == true) {
                 echo "la validación de name ha fallado";
@@ -141,14 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
 
-        //var_dump($newsletter);
-        //echo "</br>";
-        /*          $newsletter = filter_input(
-                INPUT_POST,
-                'newsletter',
-                FILTER_SANITIZE_SPECIAL_CHARS,
-                FILTER_REQUIRE_ARRAY
-            ); */
+       
         var_dump($newscheck);
         // echo "</br>";
 
@@ -166,12 +159,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<strong>Telefono:</strong> $phone <br>";
         echo "<strong>Email: </strong> $email <br>";
 
-        if (validar_name($name)) {
+    if (validar_name($name)) {
             echo "validada";
         } else {
             echo "no valida";
         };
-    }
+        }else{
+            echo "No hemos recibido el metodo POST";
+        }
+
 }
 
 /*Inicialización de las variables 
