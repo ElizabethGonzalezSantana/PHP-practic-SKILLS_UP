@@ -109,47 +109,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $address = NULL;
         }
+
         if (isset($_POST["city"])) {
             $city = limpiar_dato($_POST["city"]);
         } else {
             $city = NULL;
         }
+
         if (isset($_POST["province"])) {
             $province = limpiar_dato($_POST["province"]);
         } else {
             $province = NULL;
         }
+
         if (isset($_POST["zip"])) {
             $zip = limpiar_dato($_POST["zip"]);
         } else {
             $zip = NULL;
         }
-        if (isset($_POST["newscheck"])) {
+
+/*         if (isset($_POST["newscheck"])) {
             $newscheck = limpiar_dato($_POST["newscheck"]);
         } else {
             $newscheck = NULL;
-        }
-        if (isset($_POST["news"])) {
+        } */
+
+
+
+
+       if (isset($_POST["news"])) {
             $news = limpiar_dato($_POST["news"]);
+            /* La base de datos no aceptan letras hay que cambiarlos para que te muestren números es decir
+            te muestre esas letras en números */
         } else {
             $news = NULL;
         }
+
         if (isset($_POST["other"])) {
             $other = limpiar_dato($_POST["other"]);
         } else {
             $other = NULL;
         }
-
-
-       
-        var_dump($newscheck);
-        // echo "</br>";
-
-        // === Usa un array y muestra sus valores separados por coma (o lo que se ponga entre comillas).
-        /*  $string=implode(", ",$newsletter);
-            echo $string;
-            echo "</br>"; */
-        // === FIN MOSTRAR valores array.
+ 
 
         $other = limpiar_dato($_POST["other"]);
         echo "<strong>Noticias que quiere recibir: $newscheck";
@@ -158,6 +159,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<br><strong>Name:</strong> $name <br>";
         echo "<strong>Telefono:</strong> $phone <br>";
         echo "<strong>Email: </strong> $email <br>";
+        echo "<strong>Adress </strong> $address <br>";
+        echo "<strong>City: </strong> $city <br>";
+        echo "<strong>Province: </strong> $province <br>";
+        echo "<strong>Zip: </strong> $zip <br>";
+        echo "<strong>Other: </strong> $other <br>";
+        echo "<strong>News: </strong> $news <br>";
+        echo "<strong>Newscheck: </strong> $newscheck <br>";
+
+
+
 
     if (validar_name($name)) {
             echo "validada";
@@ -169,6 +180,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
 }
+
+/*Envia los datos y si llega todos correctos luego se tratan y si esta estan todos los datos correctos lo limpia
+y si no llegan no se limpia*/
 
 /*Inicialización de las variables 
 Si (llega datos) Entonces
