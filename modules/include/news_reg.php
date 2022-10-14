@@ -137,8 +137,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-       if (isset($_POST["news"])) {
-            $news = limpiar_dato($_POST["news"]);
+       if (isset($_POST["newscheck"])) {
+            $news = limpiar_dato($_POST["newscheck"]);
             /* La base de datos no aceptan letras hay que cambiarlos para que te muestren números es decir
             te muestre esas letras en números */
         } else {
@@ -150,7 +150,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $other = NULL;
         }
- 
+
+        $newsletter = filter_input(
+            INPUT_POST,
+            'news',
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            FILTER_REQUIRE_ARRAY
+        );
+        var_dump($news);
+        //echo "<br>Longitud de newsletter: ". count($newsletter). ".";
+        //echo "<br>";
+
+
+        $string = implode(", ", $newsletter);
+        echo $string;
+        echo "<br>";
 
         $other = limpiar_dato($_POST["other"]);
         echo "<strong>Noticias que quiere recibir: $newscheck";
