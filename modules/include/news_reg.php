@@ -4,6 +4,7 @@ require "../requiere/config.php";
 //define y inicializa las variables que se van a usar del formulario.
 $name = $email = $phone = $address = $city = $province = $zip = $other = $news = $newscheck = "";
 $name_err = $email_err = $phone_err = false;
+$checkNewscheck;
 /**
  * Función para limpiar un dato procedente de un formulario.
  * 
@@ -161,6 +162,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //echo "<br>Longitud de newsletter: ". count($newsletter). ".";
         //echo "<br>";
 
+        $lengArray = count ($newscheck);
+        switch($lengArray){
+            case 1:
+                if ($newscheck[0] == "HTML"){
+
+                    $checkNewscheck = 100;
+                }elseif($newscheck[0] == "CSS"){
+
+                    $checkNewscheck = 010;
+                }else{
+
+                    $checkNewscheck = 001;
+                }
+                break;
+            case 2:
+
+                if($newscheck[0] != "HTML"){
+
+                    $checkNewscheck = 011;
+                }elseif($newscheck[0] != "CSS"){
+
+                    $checkNewscheck = 101;
+                } else{
+
+                    $checkNewscheck = 110;
+                }
+                break;
+            case 3:
+
+                $checkNewscheck = 111;
+                    break;
+            default:
+
+                $checkNewscheck = 100;
+        }
+
+        echo "código a enviar " .$checkNewscheck;
 
         $string = implode(", ", $newsletter);
         echo $string;
