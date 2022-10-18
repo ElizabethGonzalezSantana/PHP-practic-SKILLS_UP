@@ -94,6 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
         if (validar_name($name) && validar_email($email) && validar_phone($phone)) {
+
         } else {
             if ($name_err == true) {
                 echo "la validación de name ha fallado";
@@ -161,41 +162,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         var_dump($news);
         //echo "<br>Longitud de newsletter: ". count($newsletter). ".";
         //echo "<br>";
+        $lengArray = count($newscheck);
 
-        $lengArray = count ($newscheck);
-        switch($lengArray){
+        switch($lengArray) {
             case 1:
                 if ($newscheck[0] == "HTML"){
 
-                    $checkNewscheck = 100;
+                    $checkNewscheck = bindec('100');
                 }elseif($newscheck[0] == "CSS"){
 
-                    $checkNewscheck = 010;
+                    $checkNewscheck = bindec ('010');
                 }else{
 
-                    $checkNewscheck = 001;
+                    $checkNewscheck = bindec ('001');
                 }
                 break;
             case 2:
 
                 if($newscheck[0] != "HTML"){
 
-                    $checkNewscheck = 011;
-                }elseif($newscheck[0] != "CSS"){
+                    $checkNewscheck = bindec ('011');
+                }elseif($newscheck[0] != "CSS" && $newscheck[1] == "JS") {
 
-                    $checkNewscheck = 101;
+                    $checkNewscheck =  bindec ('101');
                 } else{
 
-                    $checkNewscheck = 110;
+                    $checkNewscheck =  bindec ('110');
                 }
                 break;
             case 3:
 
-                $checkNewscheck = 111;
+                $checkNewscheck =  bindec ('111');
                     break;
             default:
 
-                $checkNewscheck = 100;
+                $checkNewscheck =  bindec ('100');
         }
 
         echo "código a enviar " .$checkNewscheck;
@@ -219,18 +220,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<strong>News: </strong> $news <br>";
         echo "<strong>Newscheck: </strong> $newscheck <br>";
 
+        //comprobar que no existen los datos que se van a enviar: nombre, email o telefono.
 
+        try {
+            $sql ="SELECT * from new_reg WHERE fullname OR email = :email OR phone =:phone";
 
+            $stmt = $conn->prepare($sql);
 
-    if (validar_name($name)) {
-            echo "validada";
-        } else {
-            echo "no valida";
-        };
-        }else{
-            echo "No hemos recibido el metodo POST";
+            $stmt->bindParam(":fullname", $name, PDO::PARAM_STR);
+            $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+            $stmt->bindParam(":phone", $phone, PDO::PARAM_STR);
+
+            $stmt->execute();
+            $resultado = $stmt->fetchAll();
+            echo "resultado es: " . var_dump($resultado) . "<br>";
+            if($resultado){
+                echo "La información existe. <br>";
+            }else{
+
+                try{
+                    $sql = "INSERT INTO news_reg (fullname, email, phone, address, city, state, zipcode, newsletters, format_news, suggestion)";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':fullname', $name, PDO::PARAM_STR);
+                    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+                    $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+                    $stmt->bindParam(':address', $adress, PDO::PARAM_STR);
+                    $stmt->bindParam(':city', $city, PDO::PARAM_STR);
+                    $stmt->bindParam(':state', $communities, PDO::PARAM_STR);
+                    $stmt->bindParam(':zipcode', $Zcode, PDO::PARAM_STR);
+                    $stmt->bindParam(':newsletters', $checkNewsletter, PDO::PARAM_INT);
+                    $stmt->bindParam(':format_news', $format, PDO::PARAM_INT);
+                    $stmt->bindParam(':suggestion', $other, PDO::PARAM_STR);
+
+                    $tmt->execute();
+                    echo"New record created succesfully.<br>";
+                    echo"Valor a ingresado decimal de 3bit" . $checkNewscheck . "<br>";
+                } catch (PDOException $e){
+                    echo $sql . "<br>" . $e->getMessage();
+                }
+                $conn = null;
+            }
+        } catch (PDOException $e){
+            echo $sql . "<br>" . $e->getMessage();
         }
+        } else {
+			
+            echo "Mensaje una de las validaciones a fallado.</br>";
+            if ($name_err == true) {
+                echo "Formato de: $name, <strong>no válido</strong><br>";
+            } elseif ($email_err == true) {
+                echo "Formato de: $email, <strong>no válido</strong><br>";
+            } elseif ($phone_err == true) {
+                echo "Formato de: $phone, <strong>no válido</strong><br>";
+            }
 
+        /* 	header("Location: ../../public/index.html");    <= Mirar como mandar mensaje a index.html
+            exit(); */
+        }	
+    
+    } else {
+    echo "Mensaje de valores requerido no han llegado.";
+    } else {
+    echo "Método post no ha llegado.";
 }
 
 /*Envia los datos y si llega todos correctos luego se tratan y si esta estan todos los datos correctos lo limpia
