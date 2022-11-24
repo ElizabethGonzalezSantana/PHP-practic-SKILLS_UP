@@ -263,7 +263,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } catch (PDOException $e){
             echo $sql . "<br>" . $e->getMessage();
         }
-        } else {
+     } else {
 			
             echo "Mensaje una de las validaciones a fallado.</br>";
             if ($name_err == true) {
